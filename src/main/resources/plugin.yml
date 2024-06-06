@@ -1,0 +1,7 @@
+name: AkaniCrates
+main: it.einjojo.akani.crates.CratesPlugin
+version: ${version}
+author: EinJoJo
+description: AkaniCrates plugin
+api-version: 1.19
+libraries: ["${caffeine}", "${hikari}"]

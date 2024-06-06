@@ -1,0 +1,10 @@
+# Muss nicht eingestellt werden, sofern AkaniCore auf dem Server vorhanden ist.
+mysql:
+  host: localhost
+  port: 3306
+  database: test
+  username: root
+  password: password
+  maxPoolSize: 2
+  minIdle: 1
+
