@@ -1,20 +1,19 @@
 package it.einjojo.akani.crates.gui;
 
-import it.einjojo.akani.crates.content.CrateContent;
+import it.einjojo.akani.crates.crate.content.CrateContent;
 import it.einjojo.akani.crates.crate.Crate;
 import mc.obliviate.inventory.ComponentIcon;
 import mc.obliviate.inventory.Gui;
 import mc.obliviate.inventory.Icon;
 import mc.obliviate.inventory.pagination.PaginationManager;
-import org.bukkit.entity.Wither;
 
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 
 public class CrateContentPreview {
     private final PaginationManager paginationManager;
     private final Crate crate;
     private final Gui gui;
-    private Consumer<ComponentIcon> previewIconModifier;
+    private BiConsumer<CrateContent, ComponentIcon> previewIconModifier;
 
     public CrateContentPreview(Crate crate, Gui gui) {
         this.paginationManager = new PaginationManager(gui);
@@ -27,13 +26,31 @@ public class CrateContentPreview {
         for (CrateContent content : crate.contents()) {
             ComponentIcon icon = new Icon(content.previewItem()).toComp();
             if (previewIconModifier != null) {
-                previewIconModifier.accept(icon);
+                previewIconModifier.accept(content, icon);
             }
             paginationManager.addItem(icon.toIcon());
         }
         paginationManager.update();
         addPreviousPage();
         addNextPage();
+    }
+
+    public PaginationManager paginationManager() {
+        return paginationManager;
+    }
+
+    public Crate crate() {
+        return crate;
+    }
+
+    public Gui gui() {
+        return gui;
+    }
+
+
+
+    public void setPreviewIconModifier(BiConsumer<CrateContent, ComponentIcon> previewIconModifier) {
+        this.previewIconModifier = previewIconModifier;
     }
 
     private void addNextPage() {
@@ -52,6 +69,7 @@ public class CrateContentPreview {
                 .onClick((event) -> {
                     if (!paginationManager.isFirstPage()) {
                         paginationManager.goPreviousPage();
+                        paginationManager.update();
 
                     }
                 })

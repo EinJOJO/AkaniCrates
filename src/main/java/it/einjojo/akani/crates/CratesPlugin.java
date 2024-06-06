@@ -1,6 +1,9 @@
 package it.einjojo.akani.crates;
 
+import co.aikar.commands.PaperCommandManager;
+import it.einjojo.akani.crates.commands.CrateCommand;
 import it.einjojo.akani.crates.crate.CrateLocationRegistry;
+import it.einjojo.akani.crates.crate.CrateManager;
 import it.einjojo.akani.crates.listener.CrateBlockOpenListener;
 import it.einjojo.akani.crates.player.CratePlayerManager;
 import it.einjojo.akani.crates.storage.player.PlayerStorageFactory;
@@ -26,6 +29,8 @@ public class CratesPlugin extends JavaPlugin {
         new InventoryAPI(this).init();
         cratePlayerManager = new CratePlayerManager(new PlayerStorageFactory().create(this));
         new CrateBlockOpenListener(new CrateLocationRegistry(), this);
+        var commandManager = new PaperCommandManager(this);
+        new CrateCommand(commandManager, new CrateManager(null, null));
     }
 
     public CratePlayerManager cratePlayerManager() {

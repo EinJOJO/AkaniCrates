@@ -1,4 +1,4 @@
-package it.einjojo.akani.crates.content;
+package it.einjojo.akani.crates.crate.content;
 
 import org.bukkit.inventory.ItemStack;
 

@@ -1,7 +1,8 @@
 package it.einjojo.akani.crates.crate.impl;
 
-import it.einjojo.akani.crates.content.CrateContent;
+import it.einjojo.akani.crates.crate.content.CrateContent;
 import it.einjojo.akani.crates.crate.Crate;
+import it.einjojo.akani.crates.crate.effect.EffectContainer;
 import it.einjojo.akani.crates.gui.CrateAnimatingOpenGui;
 import it.einjojo.akani.crates.gui.CratePreviewGui;
 import net.kyori.adventure.text.Component;
@@ -9,7 +10,7 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 
-public record CrateImpl(String id, Component title, List<CrateContent> contents) implements Crate {
+public record CrateImpl(String id, Component title, List<CrateContent> contents, EffectContainer effectContainer) implements Crate {
 
     @Override
     public void open(Player player) {
