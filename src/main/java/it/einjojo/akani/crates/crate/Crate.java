@@ -1,6 +1,7 @@
 package it.einjojo.akani.crates.crate;
 
 import it.einjojo.akani.crates.crate.content.CrateContent;
+import it.einjojo.akani.crates.crate.effect.EffectContainer;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 
@@ -17,5 +18,7 @@ public interface Crate {
     void preview(Player player);
 
     List<CrateContent> contents();
+
+    EffectContainer effectContainer();
 
 }

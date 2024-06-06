@@ -8,7 +8,7 @@ import it.einjojo.akani.crates.crate.content.CrateContent;
 import it.einjojo.akani.crates.crate.content.CrateContentFactory;
 import it.einjojo.akani.crates.crate.Crate;
 import it.einjojo.akani.crates.crate.CrateManager;
-import it.einjojo.akani.crates.crate.impl.CrateImpl;
+import it.einjojo.akani.crates.crate.impl.InventoryCrateImpl;
 import it.einjojo.akani.crates.gui.CrateAdminGui;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -37,7 +37,7 @@ public class CrateCommand  extends BaseCommand {
                 if (m == Material.AIR) continue;
                 contents.add(factory.itemContent(new ItemStack(m), (float)Math.random()));
             }
-            demoCrate = new CrateImpl("test",Component.text("TEST", NamedTextColor.RED),  contents, null);
+            demoCrate = new InventoryCrateImpl("test",Component.text("TEST", NamedTextColor.RED),  contents, null);
         }
 
         new CrateAdminGui(player, demoCrate).open();
