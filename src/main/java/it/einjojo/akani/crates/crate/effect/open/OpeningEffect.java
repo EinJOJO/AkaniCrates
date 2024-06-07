@@ -1,4 +1,4 @@
-package it.einjojo.akani.crates.crate.effect;
+package it.einjojo.akani.crates.crate.effect.open;
 
 import mc.obliviate.inventory.Gui;
 

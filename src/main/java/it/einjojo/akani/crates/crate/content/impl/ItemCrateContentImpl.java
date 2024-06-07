@@ -2,7 +2,7 @@ package it.einjojo.akani.crates.crate.content.impl;
 
 import com.google.common.base.Preconditions;
 import it.einjojo.akani.crates.crate.content.ItemCrateContent;
-import it.einjojo.akani.crates.util.PreviewItemFactory;
+import it.einjojo.akani.crates.crate.content.PreviewItemFactory;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -28,7 +28,7 @@ public class ItemCrateContentImpl implements ItemCrateContent {
 
     @Override
     public ItemStack itemStack() {
-        return itemStack.clone();
+        return itemStack;
     }
 
     @Override
@@ -48,6 +48,6 @@ public class ItemCrateContentImpl implements ItemCrateContent {
 
     @Override
     public ItemStack previewItem() {
-        return previewItem.clone();
+        return previewItem;
     }
 }

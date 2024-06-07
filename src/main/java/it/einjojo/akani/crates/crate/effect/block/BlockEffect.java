@@ -1,6 +1,4 @@
-package it.einjojo.akani.crates.crate.effect;
-
-import it.einjojo.akani.crates.crate.Crate;
+package it.einjojo.akani.crates.crate.effect.block;
 
 /**
  * Effect that is applied to the crate block.

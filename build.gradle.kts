@@ -26,9 +26,11 @@ dependencies {
     compileOnly(libs.akanicore)
     compileOnly(libs.mojangauthlib)
     compileOnly(libs.hikaricp)
+    compileOnly(libs.luckperms)
     implementation(libs.obliviateinvcore)
     implementation(libs.obliviateinvpagination)
     implementation(libs.acf)
+
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
 

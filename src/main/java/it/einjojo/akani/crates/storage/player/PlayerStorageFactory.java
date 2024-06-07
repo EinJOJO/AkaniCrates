@@ -3,6 +3,7 @@ package it.einjojo.akani.crates.storage.player;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import it.einjojo.akani.core.api.AkaniCoreProvider;
+import it.einjojo.akani.crates.util.AkaniUtil;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -10,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 public class PlayerStorageFactory {
 
     public CratePlayerStorage create(JavaPlugin plugin) {
-        if (isAkaniCoreAvailable()) {
+        if (AkaniUtil.AVAILABLE) {
             plugin.getSLF4JLogger().info("Creating Akani player storage");
             return createAkaniPlayerStorage();
         }
@@ -37,13 +38,5 @@ public class PlayerStorageFactory {
         return new AkaniCratePlayerStorage(AkaniCoreProvider.get());
     }
 
-    public boolean isAkaniCoreAvailable() {
-        try {
-            Class.forName("it.einjojo.akani.core.api.AkaniCoreProvider");
-            return true;
-        } catch (ClassNotFoundException e) {
-            return false;
-        }
-    }
 
 }
