@@ -2,6 +2,7 @@ package it.einjojo.akani.crates.gui;
 
 import it.einjojo.akani.crates.CratesPlugin;
 import it.einjojo.akani.crates.crate.Crate;
+import it.einjojo.akani.crates.crate.CrateManager;
 import it.einjojo.akani.crates.crate.content.CrateContent;
 import it.einjojo.akani.crates.crate.content.CrateContentFactory;
 import it.einjojo.akani.crates.input.ChatInput;
@@ -12,7 +13,9 @@ import mc.obliviate.inventory.Icon;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -22,13 +25,14 @@ import java.util.List;
 public class CrateAdminGui extends Gui {
     private final CrateContentPreview crateContentPreview;
     private final Crate crate;
+    private final CrateManager crateManager;
 
-    public CrateAdminGui(@NotNull Player player, Crate crate) {
+    public CrateAdminGui(@NotNull Player player, Crate crate, CrateManager crateManager) {
         super(player, "crate_admin", Component.text("Administrate Crate", NamedTextColor.GOLD), 6);
         crateContentPreview = new CrateContentPreview(crate, this);
         crateContentPreview.setPreviewIconModifier(this::modifyContentIcon);
         this.crate = crate;
-
+        this.crateManager = crateManager;
     }
 
     private void modifyContentIcon(CrateContent content, ComponentIcon componentIcon) {
@@ -83,7 +87,7 @@ public class CrateAdminGui extends Gui {
     }
 
     public void addItemButton() {
-        addItem(48, new Icon(Heads.ADD.skull()).toComp().appendLore(Component.text("Klicke um neues Item hinzufügen", NamedTextColor.GREEN))
+        addItem(49, new Icon(Heads.ADD.skull()).toComp().appendLore(Component.text("Klicke um neues Item hinzufügen", NamedTextColor.GREEN))
                 .onClick((event) -> {
                     player.closeInventory();
                     new CrateContentInput((JavaPlugin) getPlugin(), player, (contents) -> {
@@ -95,5 +99,10 @@ public class CrateAdminGui extends Gui {
                 }));
     }
 
-
+    @Override
+    public void onClose(InventoryCloseEvent event) {
+        Bukkit.getScheduler().runTaskAsynchronously(getPlugin(), () -> {
+            crateManager.storage().saveCrate(crate);
+        });
+    }
 }

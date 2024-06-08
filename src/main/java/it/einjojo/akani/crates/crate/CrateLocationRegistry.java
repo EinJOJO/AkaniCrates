@@ -28,6 +28,10 @@ public class CrateLocationRegistry {
                 .toList();
     }
 
+    public void clear() {
+        locationCrateMap.clear();
+    }
+
     public void unregister(Location location) {
         locationCrateMap.remove(location);
     }

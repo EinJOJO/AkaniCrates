@@ -48,6 +48,12 @@ tasks {
         enabled = true
     }
 
+    shadowJar {
+        archiveBaseName.set("AkaniCrates")
+        archiveVersion.set("")
+        archiveClassifier.set("")
+    }
+
     withType<JavaCompile> {
         options.encoding = "UTF-8"
         options.isIncremental = true

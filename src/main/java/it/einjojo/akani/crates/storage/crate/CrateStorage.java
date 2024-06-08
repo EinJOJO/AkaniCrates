@@ -7,10 +7,14 @@ import java.util.Collection;
 
 public interface CrateStorage {
 
+    void init();
+
     Collection<Crate> loadAllCrates();
+
     void saveCrate(Crate crate);
 
     Collection<Location> loadAllLocations(String crateId);
+
     void saveLocation(String crateId, Location location);
 
 }
