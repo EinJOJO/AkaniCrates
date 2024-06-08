@@ -1,6 +1,7 @@
 package it.einjojo.akani.crates.crate.content.impl;
 
 import it.einjojo.akani.core.api.economy.EconomyManager;
+import it.einjojo.akani.crates.crate.content.CrateGiveRewardException;
 import it.einjojo.akani.crates.crate.content.EconomyCrateContent;
 import it.einjojo.akani.crates.crate.content.PreviewItemFactory;
 import org.bukkit.entity.Player;
@@ -33,12 +34,16 @@ public class AkaniEconomyCrateContentImpl implements EconomyCrateContent {
     }
 
     @Override
-    public void give(Player player) {
-        economyManager.playerEconomyAsync(player.getUniqueId()).thenAccept((economyHolder -> {
-            economyHolder.orElseThrow().addBalance(economyAmount);
-        })).exceptionally((ex) -> {
-            throw new RuntimeException(ex);
-        });
+    public void give(Player player) throws CrateGiveRewardException {
+        try {
+            economyManager.playerEconomyAsync(player.getUniqueId()).thenAccept((economyHolder -> {
+                economyHolder.orElseThrow().addBalance(economyAmount);
+            })).exceptionally((ex) -> {
+                throw new RuntimeException(ex);
+            });
+        } catch (Exception ex) {
+            throw new CrateGiveRewardException(ex);
+        }
     }
 
     @Override

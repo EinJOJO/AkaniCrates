@@ -62,6 +62,9 @@ public class PreviewItemFactoryImpl implements PreviewItemFactory {
      * @return Component with economy information
      */
     private final Component economyComponent(int amount, String currencyName) {
+        if (currencyName == null) {
+            currencyName = "null";
+        }
         return CratesPlugin.miniMessage().deserialize("<yellow><amount> <white><currency>",
                 Placeholder.parsed("amount", String.valueOf(amount)),
                 Placeholder.parsed("currency", currencyName));
@@ -73,7 +76,7 @@ public class PreviewItemFactoryImpl implements PreviewItemFactory {
      */
     private Component chanceComponent(float chance) {
         return CratesPlugin.miniMessage().deserialize("<yellow>Chance: <white><chance>%",
-                Placeholder.parsed("chance", String.valueOf(chance)));
+                Placeholder.parsed("chance", String.valueOf(chance * 100)));
     }
 
     /**

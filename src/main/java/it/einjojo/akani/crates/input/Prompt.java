@@ -16,7 +16,7 @@ public class Prompt {
     private BukkitTask task;
 
     public Prompt(Player player, Component header, Component footer, JavaPlugin plugin) {
-        title = Title.title(header, footer, Title.Times.times(Duration.ofMillis(100), Duration.ofMillis(500), Duration.ofMillis(100)));
+        title = Title.title(header, footer, Title.Times.times(Duration.ofMillis(0), Duration.ofMillis(500), Duration.ofMillis(0)));
         this.plugin = plugin;
         this.player = player;
     }
@@ -24,7 +24,7 @@ public class Prompt {
     public void show() {
         task = Bukkit.getScheduler().runTaskTimer(plugin, () -> {
             player.showTitle(title);
-        }, 0, 10);
+        }, 0, 8);
     }
 
     public void stop() {

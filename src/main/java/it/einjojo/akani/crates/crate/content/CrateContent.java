@@ -9,7 +9,13 @@ import org.jetbrains.annotations.Range;
  */
 public interface CrateContent {
 
-    void give(Player player);
+    /**
+     * enforce exception handling
+     *
+     * @param player the player to give the content to
+     * @throws CrateGiveRewardException if the content could not be given and the player should be able to reroll
+     */
+    void give(Player player) throws CrateGiveRewardException;
 
     @Range(from = 0, to = 1)
     float chance();

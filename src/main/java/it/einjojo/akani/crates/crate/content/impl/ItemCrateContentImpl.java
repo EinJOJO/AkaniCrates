@@ -1,6 +1,7 @@
 package it.einjojo.akani.crates.crate.content.impl;
 
 import com.google.common.base.Preconditions;
+import it.einjojo.akani.crates.crate.content.CrateGiveRewardException;
 import it.einjojo.akani.crates.crate.content.ItemCrateContent;
 import it.einjojo.akani.crates.crate.content.PreviewItemFactory;
 import org.bukkit.Material;
@@ -11,7 +12,8 @@ import org.jetbrains.annotations.Range;
 
 public class ItemCrateContentImpl implements ItemCrateContent {
     private final ItemStack itemStack;
-    private final ItemStack previewItem;
+    private final PreviewItemFactory previewItemFactory;
+    private ItemStack previewItem;
     private float chance;
 
     public ItemCrateContentImpl(@NotNull ItemStack itemStack, float chance, PreviewItemFactory previewItemFactory) {
@@ -23,6 +25,7 @@ public class ItemCrateContentImpl implements ItemCrateContent {
         this.itemStack = itemStack;
         this.chance = chance;
         this.previewItem = previewItemFactory.createPreviewItem(this);
+        this.previewItemFactory = previewItemFactory;
 
     }
 
@@ -32,8 +35,12 @@ public class ItemCrateContentImpl implements ItemCrateContent {
     }
 
     @Override
-    public void give(Player player) {
-        player.getInventory().addItem(itemStack());
+    public void give(Player player) throws CrateGiveRewardException {
+        try {
+            player.getInventory().addItem(itemStack());
+        } catch (Exception ex) {
+            throw new CrateGiveRewardException(ex);
+        }
     }
 
     @Override
@@ -44,6 +51,7 @@ public class ItemCrateContentImpl implements ItemCrateContent {
     @Override
     public void setChance(@Range(from = 0, to = 1) float chance) {
         this.chance = chance;
+        this.previewItem = previewItemFactory.createPreviewItem(this);
     }
 
     @Override

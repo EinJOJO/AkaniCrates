@@ -1,7 +1,7 @@
 package it.einjojo.akani.crates.gui;
 
-import it.einjojo.akani.crates.crate.content.CrateContent;
 import it.einjojo.akani.crates.crate.Crate;
+import it.einjojo.akani.crates.crate.content.CrateContent;
 import mc.obliviate.inventory.ComponentIcon;
 import mc.obliviate.inventory.Gui;
 import mc.obliviate.inventory.Icon;
@@ -17,14 +17,15 @@ public class CrateContentPreview {
 
     public CrateContentPreview(Crate crate, Gui gui) {
         this.paginationManager = new PaginationManager(gui);
+        paginationManager.registerPageSlotsBetween(9, 44);
         this.crate = crate;
         this.gui = gui;
     }
 
     public void placeContents() {
-        paginationManager.registerPageSlotsBetween(9, 44);
+        paginationManager.getItems().clear();
         for (CrateContent content : crate.contents()) {
-            ComponentIcon icon = new Icon(content.previewItem()).toComp();
+            ComponentIcon icon = new Icon(content.previewItem().clone()).toComp();
             if (previewIconModifier != null) {
                 previewIconModifier.accept(content, icon);
             }
@@ -46,7 +47,6 @@ public class CrateContentPreview {
     public Gui gui() {
         return gui;
     }
-
 
 
     public void setPreviewIconModifier(BiConsumer<CrateContent, ComponentIcon> previewIconModifier) {

@@ -13,7 +13,7 @@ import java.util.List;
  * Factory for creating preview items for crate content
  */
 public interface PreviewItemFactory {
-    ItemStack NO_PREVIEW = new ItemBuilder(Material.VOID_AIR)
+    ItemStack NO_PREVIEW = new ItemBuilder(Material.STRUCTURE_VOID)
             .displayName(Component.text("Leere Vorschau", NamedTextColor.RED))
             .lore(List.of(
                     Component.text("Kein Preview-Item konnte", NamedTextColor.RED),

@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 public class PlayerStorageFactory {
 
     public CratePlayerStorage create(JavaPlugin plugin) {
-        if (AkaniUtil.AVAILABLE) {
+        if (AkaniUtil.isAvailable()) {
             plugin.getSLF4JLogger().info("Creating Akani player storage");
             return createAkaniPlayerStorage();
         }
@@ -20,7 +20,11 @@ public class PlayerStorageFactory {
             throw new IllegalArgumentException("Missing mysql section in config");
         }
         plugin.getSLF4JLogger().info("Creating Hikari player storage");
-        return createHikariPlayerStorage(section);
+        try {
+            return createHikariPlayerStorage(section);
+        } catch (Exception ex) {
+            return new NullCratePlayerStorage();
+        }
     }
 
     public HikariSQLCratePlayerStorage createHikariPlayerStorage(@NotNull ConfigurationSection section) {

@@ -10,18 +10,19 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Range;
 
+import java.time.Duration;
 import java.time.Instant;
 
-public class LuckPermsPermissionCrateContent implements PermissionCrateContent {
+public class LuckPermsPermissionCrateContentImpl implements PermissionCrateContent {
     private final LuckPerms luckPerms;
     private final String permission;
     private final String permissionDescription;
     private final ItemStack previewItem;
-    private final Instant expiry;
+    private final Duration expiry;
     private float chance;
 
 
-    public LuckPermsPermissionCrateContent(LuckPerms luckPerms, String permission, String permissionDescription, PreviewItemFactory previewItemFactory, Instant expiry, float chance) {
+    public LuckPermsPermissionCrateContentImpl(LuckPerms luckPerms, String permission, String permissionDescription, PreviewItemFactory previewItemFactory, Duration expiry, float chance) {
         this.luckPerms = luckPerms;
         this.permission = permission;
         this.permissionDescription = permissionDescription;
@@ -43,8 +44,10 @@ public class LuckPermsPermissionCrateContent implements PermissionCrateContent {
     @Override
     public void give(Player player) {
         User user = luckPerms.getPlayerAdapter(Player.class).getUser(player);
+        //TODO overwriting permissions or throw exceptions if the permission is already present
         var nodeBuilder = Node.builder(permission()).withMetadata(NodeMetadataKey.of("origin", String.class), "crate-content");
-        if (expiry != null) nodeBuilder.expiry(expiry.toEpochMilli() / 1000); // epoch seconds required.
+        if (expiry != null)
+            nodeBuilder.expiry(Instant.now().plus(expiry).toEpochMilli() / 1000); // epoch seconds required.
         user.data().add(nodeBuilder.build());
         luckPerms.getUserManager().saveUser(user);
     }

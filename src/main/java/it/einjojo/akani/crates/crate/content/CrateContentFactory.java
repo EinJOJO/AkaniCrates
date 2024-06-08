@@ -8,7 +8,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
 
-import java.time.Instant;
+import java.time.Duration;
 
 public class CrateContentFactory {
     private PreviewItemFactoryImpl previewItemFactory = new PreviewItemFactoryImpl();
@@ -28,7 +28,7 @@ public class CrateContentFactory {
         return new NullEconomyCrateContentImpl(amount, chance, previewItemFactory, "NullTaler");
     }
 
-    public EconomyCrateContent coinsCrateContent(@Range(from = 0, to = Integer.MAX_VALUE) int amount, @Range(from = 0, to = 1) float chance) {
+    public EconomyCrateContent coinsContent(@Range(from = 0, to = Integer.MAX_VALUE) int amount, @Range(from = 0, to = 1) float chance) {
         if (AkaniUtil.isAvailable()) {
             return new AkaniEconomyCrateContentImpl(amount, chance, AkaniCoreProvider.get().coinsManager(), previewItemFactory, "Coins");
         }
@@ -39,12 +39,12 @@ public class CrateContentFactory {
         return new ItemCrateContentImpl(itemStack, Float.max(0, Float.min(1, chance)), previewItemFactory);
     }
 
-    public PermissionCrateContent expiringPermissionCrateContent(String permission, String permissionDescription, @Range(from = 0, to = 1) float chance, Instant expiry) {
-        return new LuckPermsPermissionCrateContent(LuckPermsProvider.get(), permission, permissionDescription, previewItemFactory, expiry, chance);
+    public PermissionCrateContent expiringPermissionContent(String permission, String permissionDescription, @Range(from = 0, to = 1) float chance, Duration duration) {
+        return new LuckPermsPermissionCrateContentImpl(LuckPermsProvider.get(), permission, permissionDescription, previewItemFactory, duration, chance);
     }
 
-    public PermissionCrateContent permissionCrateContent(String permission, String permissionDescription, @Range(from = 0, to = 1) float chance) {
-        return new LuckPermsPermissionCrateContent(LuckPermsProvider.get(), permission, permissionDescription, previewItemFactory, null, chance);
+    public PermissionCrateContent permissionContent(String permission, String permissionDescription, @Range(from = 0, to = 1) float chance) {
+        return new LuckPermsPermissionCrateContentImpl(LuckPermsProvider.get(), permission, permissionDescription, previewItemFactory, null, chance);
     }
 
 
