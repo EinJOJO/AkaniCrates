@@ -25,7 +25,7 @@ public class CratesPlugin extends JavaPlugin {
     private static final MiniMessage miniMessage = MiniMessage.builder()
             .tags(TagResolver.builder()
                     .resolver(TagResolver.standard())
-                    .tag("prefix", Tag.selfClosingInserting(MiniMessage.miniMessage().deserialize("<gray>Crates</gray>")))
+                    .tag("prefix", Tag.selfClosingInserting(MiniMessage.miniMessage().deserialize("<gray>[<b><gradient:#FBAB7E:#F7CE68>Crates</gradient></b>] ")))
                     .build())
             .build();
     private CratePlayerManager cratePlayerManager;
@@ -50,7 +50,7 @@ public class CratesPlugin extends JavaPlugin {
                 crateLocationRegistry);
 
         var commandManager = new PaperCommandManager(this);
-        commandManager.setDefaultExceptionHandler(this::handleCommandException);
+        commandManager.setDefaultExceptionHandler(this::handleCommandException, false);
         new CrateCommand(commandManager, crateManager);
     }
 
@@ -64,6 +64,7 @@ public class CratesPlugin extends JavaPlugin {
             commandSender.sendMessage(miniMessage().deserialize("<red>Kein Element gefunden"));
             return true;
         }
+        getSLF4JLogger().error("Error in command", t);
         return false;
     }
 }

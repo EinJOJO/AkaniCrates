@@ -20,15 +20,14 @@ public abstract class AbstractSQLCratePlayerStorage implements CratePlayerStorag
     @Override
     public void init() {
         try (Connection connection = connection(); Statement statement = connection.createStatement()) {
-            statement.execute("""
-                    CREATE TABLE crates_players (
+            if (statement.execute("""
+                    CREATE TABLE IF NOT EXISTS crates_players (
                         player_uuid VARCHAR(36) NOT NULL,
                         crate_id INT NOT NULL,
                         amount INT NOT NULL DEFAULT 0,
                         PRIMARY KEY (player_uuid, crate_id)
                     );
-                    """);
-            log.info("Created table crates_players");
+                    """)) log.info("Created table crates_players");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -64,7 +63,8 @@ public abstract class AbstractSQLCratePlayerStorage implements CratePlayerStorag
         if (!impl.hasChanged()) {
             log.debug("Player {} has no changes to save", player.playerUuid());
             return;
-        };
+        }
+        ;
         try (Connection connection = connection(); PreparedStatement ps = connection.prepareStatement(sql)) {
             for (String crateId : impl.changedSet()) {
                 int amount = impl.keys(crateId);

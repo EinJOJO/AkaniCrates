@@ -52,6 +52,10 @@ tasks {
         archiveBaseName.set("AkaniCrates")
         archiveVersion.set("")
         archiveClassifier.set("")
+        relocate("mc.obliviate.inventory", "it.einjojo.akani.crates.shadow.inventory")
+        relocate("co.aikar", "it.einjojo.akani.crates.shadow.aikar")
+
+
     }
 
     withType<JavaCompile> {
