@@ -57,11 +57,11 @@ public class CrateCommand extends BaseCommand {
 
         List<CrateContent> contents = new LinkedList<>();
         var factory = new CrateContentFactory();
-        for (Material m : Material.values()) {
-            if (m.isFuel() && !m.isAir()) {
-                contents.add(factory.itemContent(new ItemStack(m), 1));
-            }
-        }
+        //for (Material m : Material.values()) {
+        //    if (m.isFuel() && !m.isAir()) {
+        //        contents.add(factory.itemContent(new ItemStack(m), 1));
+        //    }
+        //}
 
         Component titleComponent = CratesPlugin.miniMessage().deserialize(title);
         crateManager.register(new InventoryCrateImpl(

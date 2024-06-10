@@ -9,18 +9,20 @@ import net.luckperms.api.node.metadata.NodeMetadataKey;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Range;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
 import java.time.Instant;
 
 public class LuckPermsPermissionCrateContentImpl implements PermissionCrateContent {
+    private static final Logger log = LoggerFactory.getLogger(LuckPermsPermissionCrateContentImpl.class);
     private final LuckPerms luckPerms;
     private final String permission;
     private final String permissionDescription;
     private final ItemStack previewItem;
     private final Duration expiry;
     private float chance;
-
 
     public LuckPermsPermissionCrateContentImpl(LuckPerms luckPerms, String permission, String permissionDescription, PreviewItemFactory previewItemFactory, Duration expiry, float chance) {
         this.luckPerms = luckPerms;
@@ -49,6 +51,7 @@ public class LuckPermsPermissionCrateContentImpl implements PermissionCrateConte
         if (expiry != null)
             nodeBuilder.expiry(Instant.now().plus(expiry).toEpochMilli() / 1000); // epoch seconds required.
         user.data().add(nodeBuilder.build());
+        log.info("Gave permission {} to player {}", permission(), player.getName());
         luckPerms.getUserManager().saveUser(user);
     }
 

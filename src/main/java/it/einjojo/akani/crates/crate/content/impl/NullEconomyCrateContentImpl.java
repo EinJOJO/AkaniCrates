@@ -12,6 +12,7 @@ public class NullEconomyCrateContentImpl implements EconomyCrateContent {
     private final ItemStack previewItem;
     private float chance;
 
+
     public NullEconomyCrateContentImpl(int amount, float chance, PreviewItemFactory previewItemFactory, String economyName) {
         this.amount = amount;
         this.chance = chance;
