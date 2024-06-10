@@ -1,5 +1,6 @@
 package it.einjojo.akani.crates.crate.content;
 
+import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Range;
@@ -21,6 +22,17 @@ public interface CrateContent {
     float chance();
 
     void setChance(@Range(from = 0, to = 1) float chance);
+
+    ContentRarity rarity();
+
+    /**
+     * Name of the item
+     *
+     * @return the name of the item
+     */
+    Component displayName();
+
+    void setRarity(ContentRarity rarity);
 
     ItemStack previewItem();
 

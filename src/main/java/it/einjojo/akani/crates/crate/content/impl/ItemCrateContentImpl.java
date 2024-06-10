@@ -1,9 +1,11 @@
 package it.einjojo.akani.crates.crate.content.impl;
 
 import com.google.common.base.Preconditions;
+import it.einjojo.akani.crates.crate.content.ContentRarity;
 import it.einjojo.akani.crates.crate.content.CrateGiveRewardException;
 import it.einjojo.akani.crates.crate.content.ItemCrateContent;
 import it.einjojo.akani.crates.crate.content.PreviewItemFactory;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -15,8 +17,10 @@ public class ItemCrateContentImpl implements ItemCrateContent {
     private final PreviewItemFactory previewItemFactory;
     private ItemStack previewItem;
     private float chance;
+    private ContentRarity rarity;
 
-    public ItemCrateContentImpl(@NotNull ItemStack itemStack, float chance, PreviewItemFactory previewItemFactory) {
+    public ItemCrateContentImpl(@NotNull ItemStack itemStack, float chance, PreviewItemFactory previewItemFactory, ContentRarity rarity) {
+        this.rarity = rarity;
         Preconditions.checkNotNull(itemStack);
         //TODO AIR CHECK
         if (itemStack.getType().equals(Material.AIR)) {
@@ -27,6 +31,21 @@ public class ItemCrateContentImpl implements ItemCrateContent {
         this.previewItem = previewItemFactory.createPreviewItem(this);
         this.previewItemFactory = previewItemFactory;
 
+    }
+
+    @Override
+    public Component displayName() {
+        return Component.text(itemStack.getType().name());
+    }
+
+    @Override
+    public ContentRarity rarity() {
+        return rarity;
+    }
+
+    @Override
+    public void setRarity(ContentRarity rarity) {
+        this.rarity = rarity;
     }
 
     @Override

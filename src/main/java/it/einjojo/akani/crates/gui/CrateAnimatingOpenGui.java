@@ -4,6 +4,7 @@ import com.github.Anon8281.universalScheduler.scheduling.tasks.MyScheduledTask;
 import it.einjojo.akani.crates.CratesPlugin;
 import it.einjojo.akani.crates.crate.Crate;
 import it.einjojo.akani.crates.crate.content.CrateContent;
+import it.einjojo.akani.crates.util.IconTuple;
 import it.einjojo.akani.crates.util.ScrambledArrayList;
 import mc.obliviate.inventory.Gui;
 import mc.obliviate.inventory.Icon;
@@ -26,7 +27,7 @@ public class CrateAnimatingOpenGui extends Gui {
     private static final Logger log = LoggerFactory.getLogger(CrateAnimatingOpenGui.class);
     private static Sound CRATE_OPEN_SOUND = Sound.BLOCK_NOTE_BLOCK_CHIME;
     private final ArrayList<CrateContent> availableRewards = new ArrayList<>();
-    private final ScrambledArrayList<Icon> scrambledArrayList;
+    private final ScrambledArrayList<IconTuple> scrambledArrayList;
     private final Crate crate;
     private final int stopAtDelay = 5 + RANDOM.nextInt(10);
     private int offset = -9;
@@ -40,11 +41,14 @@ public class CrateAnimatingOpenGui extends Gui {
 
     public CrateAnimatingOpenGui(@NotNull Player player, Crate crate) {
         super(player, "crate_open", crate.title(), 6);
-        LinkedList<Icon> icons = new LinkedList<>();
+        LinkedList<IconTuple> icons = new LinkedList<>();
         crate.contents().forEach(content -> {
             if (content.chance() >= RANDOM.nextFloat()) {
                 availableRewards.add(content);
-                icons.add(new Icon(content.previewItem()));
+                icons.add(new IconTuple(
+                        new Icon(content.previewItem()),
+                        new Icon(content.rarity().openingTypeIndicator()
+                        )));
             }
         });
         scrambledArrayList = new ScrambledArrayList<>(icons);
@@ -100,6 +104,7 @@ public class CrateAnimatingOpenGui extends Gui {
             addItem(9 * 3 + 4, new Icon(givenRewardObject.previewItem()));
             hopperIcon();
             setActionSlot(new Icon(Material.GREEN_WOOL).setName("§aEine weitere Crate öffnen").onClick((click) -> {
+                GuiSound.GOOD_CLICK.play(this);
                 new CrateAnimatingOpenGui(player, crate).open();
             }));
         }
@@ -111,6 +116,7 @@ public class CrateAnimatingOpenGui extends Gui {
         setActionSlot(new Icon(Material.ORANGE_WOOL).setName("§eVerlangsame..."));
         delay = 1;
         stopTickOffset = RANDOM.nextInt(25);
+        GuiSound.GOOD_CLICK.play(this);
     }
 
     public void setActionSlot(Icon icon) {
@@ -120,14 +126,15 @@ public class CrateAnimatingOpenGui extends Gui {
     public void moveItems() {
         offset = (offset + 1) % scrambledArrayList.size();
         for (int i = 0; i < 9; i++) {
-            Icon icon = icon((i + offset) % scrambledArrayList.size());
-            if (icon != null) {
-                addItem(3 * 9 + i, icon);
+            IconTuple iconTuple = icon((i + offset) % scrambledArrayList.size());
+            if (iconTuple != null) {
+                addItem(3 * 9 + i, iconTuple.first());
+                addItem(4 * 9 + i, iconTuple.second());
             }
         }
     }
 
-    public Icon icon(int slot) {
+    public IconTuple icon(int slot) {
         return (slot < 0 || slot >= scrambledArrayList.size()) ? null : scrambledArrayList.get(slot);
     }
 
@@ -156,6 +163,7 @@ public class CrateAnimatingOpenGui extends Gui {
         try {
             givenRewardObject = availableRewards.get(scrambledArrayList.getOriginalIndexByScrambledIndex((offset + 4) % scrambledArrayList.size()));
             givenRewardObject.give(player);
+            givenRewardObject.rarity().postGive(player, givenRewardObject);
         } catch (Exception e) {
             player.sendMessage(CratesPlugin.miniMessage().deserialize("<prefix><red>Ein Fehler ist aufgetreten!"));
             log.error("An error occurred while giving the player the reward", e);

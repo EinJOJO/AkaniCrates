@@ -59,6 +59,9 @@ public class CrateContentPreview {
                     if (!paginationManager.isLastPage()) {
                         paginationManager.goNextPage();
                         paginationManager.update();
+                        GuiSound.GOOD_CLICK.play(gui);
+                    } else {
+                        GuiSound.BAD_CLICK.play(gui);
                     }
                 })
         );
@@ -70,7 +73,9 @@ public class CrateContentPreview {
                     if (!paginationManager.isFirstPage()) {
                         paginationManager.goPreviousPage();
                         paginationManager.update();
-
+                        GuiSound.GOOD_CLICK.play(gui);
+                    } else {
+                        GuiSound.BAD_CLICK.play(gui);
                     }
                 })
         );

@@ -3,10 +3,7 @@ package it.einjojo.akani.crates.crate.content.impl;
 import it.einjojo.akani.core.economy.CoinsEconomyManager;
 import it.einjojo.akani.core.economy.ThalerEconomyManager;
 import it.einjojo.akani.crates.CratesPlugin;
-import it.einjojo.akani.crates.crate.content.CrateContent;
-import it.einjojo.akani.crates.crate.content.EconomyCrateContent;
-import it.einjojo.akani.crates.crate.content.ItemCrateContent;
-import it.einjojo.akani.crates.crate.content.PreviewItemFactory;
+import it.einjojo.akani.crates.crate.content.*;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Material;
@@ -25,11 +22,11 @@ public class PreviewItemFactoryImpl implements PreviewItemFactory {
     @Override
     public ItemStack createPreviewItem(@NotNull CrateContent crateContent) {
         if (crateContent instanceof ItemCrateContent itemCrateContent) {
-            return createChancedPreviewItem(itemCrateContent.itemStack(), itemCrateContent.chance());
+            return createBasicPreviewItem(itemCrateContent.itemStack(), itemCrateContent.chance(), crateContent.rarity());
         } else if (crateContent instanceof EconomyCrateContent economyCrateContent) {
             return createEconomyPreviewItem(economyCrateContent);
         }
-        return createChancedPreviewItem(NO_PREVIEW, crateContent.chance());
+        return createBasicPreviewItem(NO_PREVIEW, crateContent.chance(), crateContent.rarity());
     }
 
     /**
@@ -49,8 +46,14 @@ public class PreviewItemFactoryImpl implements PreviewItemFactory {
                 Component.empty(),
                 chanceComponent(economyCrateContent.chance()),
                 economyComponent(economyCrateContent.economyAmount(), economyCrateContent.currencyName()),
+                rarityComponent(economyCrateContent.rarity()),
                 Component.empty()
         ));
+    }
+
+    private Component rarityComponent(ContentRarity rarity) {
+        return CratesPlugin.miniMessage().deserialize("<gray>Seltenheit: <white><rarity>",
+                Placeholder.component("rarity", rarity.displayName()));
     }
 
 
@@ -84,10 +87,11 @@ public class PreviewItemFactoryImpl implements PreviewItemFactory {
      * @param chance    chance to be appended
      * @return new item with appended chance
      */
-    public ItemStack createChancedPreviewItem(ItemStack itemStack, float chance) {
+    public ItemStack createBasicPreviewItem(ItemStack itemStack, float chance, ContentRarity contentRarity) {
         return appendLore(itemStack, List.of(
                 Component.empty(),
                 chanceComponent(chance),
+                rarityComponent(contentRarity),
                 Component.empty()
         ));
     }

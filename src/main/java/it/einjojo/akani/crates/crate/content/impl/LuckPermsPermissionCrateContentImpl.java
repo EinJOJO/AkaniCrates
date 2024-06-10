@@ -1,7 +1,9 @@
 package it.einjojo.akani.crates.crate.content.impl;
 
+import it.einjojo.akani.crates.crate.content.ContentRarity;
 import it.einjojo.akani.crates.crate.content.PermissionCrateContent;
 import it.einjojo.akani.crates.crate.content.PreviewItemFactory;
+import net.kyori.adventure.text.Component;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.model.user.User;
 import net.luckperms.api.node.Node;
@@ -23,14 +25,16 @@ public class LuckPermsPermissionCrateContentImpl implements PermissionCrateConte
     private final ItemStack previewItem;
     private final Duration expiry;
     private float chance;
+    private ContentRarity rarity;
 
-    public LuckPermsPermissionCrateContentImpl(LuckPerms luckPerms, String permission, String permissionDescription, PreviewItemFactory previewItemFactory, Duration expiry, float chance) {
+    public LuckPermsPermissionCrateContentImpl(LuckPerms luckPerms, String permission, String permissionDescription, PreviewItemFactory previewItemFactory, Duration expiry, float chance, ContentRarity rarity) {
         this.luckPerms = luckPerms;
         this.permission = permission;
         this.permissionDescription = permissionDescription;
         this.previewItem = previewItemFactory.createPreviewItem(this);
         this.expiry = expiry;
         this.chance = chance;
+        this.rarity = rarity;
     }
 
     @Override
@@ -63,6 +67,22 @@ public class LuckPermsPermissionCrateContentImpl implements PermissionCrateConte
     @Override
     public void setChance(@Range(from = 0, to = 1) float chance) {
         this.chance = chance;
+    }
+
+    @Override
+    public ContentRarity rarity() {
+        return rarity;
+    }
+
+    @Override
+    public Component displayName() {
+        return Component.text(permission());
+
+    }
+
+    @Override
+    public void setRarity(ContentRarity rarity) {
+        this.rarity = rarity;
     }
 
     @Override
