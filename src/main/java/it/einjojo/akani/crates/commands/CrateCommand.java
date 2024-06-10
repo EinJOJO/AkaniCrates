@@ -14,15 +14,15 @@ import it.einjojo.akani.crates.crate.content.CrateContentFactory;
 import it.einjojo.akani.crates.crate.effect.NullEffectFactory;
 import it.einjojo.akani.crates.crate.impl.InventoryCrateImpl;
 import it.einjojo.akani.crates.gui.CrateAdminGui;
+import it.einjojo.akani.crates.gui.CrateAnimatingOpenGui;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @CommandAlias("crate|crates")
 public class CrateCommand extends BaseCommand {
@@ -31,7 +31,15 @@ public class CrateCommand extends BaseCommand {
     public CrateCommand(PaperCommandManager paperCommandManager, CrateManager crateManager) {
         this.crateManager = crateManager;
         paperCommandManager.getCommandCompletions().registerAsyncCompletion("crates", c -> crateManager.crates().stream().map(Crate::id).toList());
+        paperCommandManager.getCommandCompletions().registerAsyncCompletion("sound", c -> Arrays.stream(Sound.values()).map(Enum::name).toList());
         paperCommandManager.getCommandContexts().registerContext(Crate.class, c -> Optional.ofNullable(crateManager.crate(c.popFirstArg())).orElseThrow());
+        paperCommandManager.getCommandContexts().registerContext(Sound.class, c -> {
+            try {
+                return Sound.valueOf(c.popFirstArg());
+            } catch (IllegalArgumentException e) {
+                throw new NoSuchElementException();
+            }
+        });
         paperCommandManager.registerCommand(this);
     }
 
@@ -90,6 +98,14 @@ public class CrateCommand extends BaseCommand {
         player.sendMessage(CratesPlugin.miniMessage().deserialize("<prefix><gray>Öffne <crate> Crate",
                 Placeholder.component("crate", crate.title())));
         crate.open(player);
+    }
+
+    @Subcommand("setSound")
+    @CommandCompletion("@sound")
+    public void setSound(Player player, Sound sound) {
+        player.sendMessage(CratesPlugin.miniMessage().deserialize("<prefix><gray>Setze Crate Sound auf <sound>",
+                Placeholder.parsed("sound", sound.name())));
+        CrateAnimatingOpenGui.setSound(sound);
     }
 
 
