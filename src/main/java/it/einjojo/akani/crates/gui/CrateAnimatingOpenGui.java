@@ -61,7 +61,7 @@ public class CrateAnimatingOpenGui extends Gui {
 
 
     private void hopperIcon() {
-        addItem(9 * 2 + 4, new Icon(Material.HOPPER).setName("§6§lDein Gewinn"));
+        addItem(9  + 4, new Icon(Material.HOPPER).setName("§6§lDein Gewinn"));
     }
 
     private float soundPitch() {
@@ -129,7 +129,7 @@ public class CrateAnimatingOpenGui extends Gui {
             IconTuple iconTuple = icon((i + offset) % scrambledArrayList.size());
             if (iconTuple != null) {
                 addItem(3 * 9 + i, iconTuple.first());
-                addItem(4 * 9 + i, iconTuple.second());
+                addItem(2 * 9 + i, iconTuple.second());
             }
         }
     }

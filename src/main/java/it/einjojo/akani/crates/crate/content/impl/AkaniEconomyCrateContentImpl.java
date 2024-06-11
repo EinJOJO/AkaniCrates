@@ -23,9 +23,9 @@ public class AkaniEconomyCrateContentImpl implements EconomyCrateContent {
         this.economyAmount = economyAmount;
         this.economyManager = economyManager;
         this.chance = chance;
-        this.previewItem = previewItemFactory.createPreviewItem(this);
         this.currencyName = currencyName;
         this.rarity = rarity;
+        this.previewItem = previewItemFactory.createPreviewItem(this);
     }
 
     @Override

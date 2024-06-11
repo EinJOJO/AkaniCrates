@@ -19,9 +19,9 @@ public class NullEconomyCrateContentImpl implements EconomyCrateContent {
     public NullEconomyCrateContentImpl(int amount, float chance, PreviewItemFactory previewItemFactory, String economyName, ContentRarity rarity) {
         this.amount = amount;
         this.chance = chance;
-        previewItem = previewItemFactory.createPreviewItem(this);
         this.economyName = economyName;
         this.rarity = rarity;
+        previewItem = previewItemFactory.createPreviewItem(this);
     }
 
     @Override

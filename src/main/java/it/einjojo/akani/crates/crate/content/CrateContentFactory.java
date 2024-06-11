@@ -9,8 +9,23 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
 
 import java.time.Duration;
+import java.util.NavigableMap;
+import java.util.TreeMap;
 
 public class CrateContentFactory {
+    private static final NavigableMap<Float, ContentRarity> rarityMap = new TreeMap<>();
+
+    static {
+        rarityMap.put(0.0f, ContentRarity.GODLY);
+        rarityMap.put(0.01f, ContentRarity.LEGENDARY);
+        rarityMap.put(0.05f, ContentRarity.MYTHIC);
+        rarityMap.put(0.10f, ContentRarity.EPIC);
+        rarityMap.put(0.25f, ContentRarity.VERY_RARE);
+        rarityMap.put(0.50f, ContentRarity.RARE);
+        rarityMap.put(0.75f, ContentRarity.UNCOMMON);
+        rarityMap.put(1.0f, ContentRarity.NORMAL);
+    }
+
     private PreviewItemFactoryImpl previewItemFactory = new PreviewItemFactoryImpl();
 
     public PreviewItemFactoryImpl previewItemFactory() {
@@ -58,7 +73,7 @@ public class CrateContentFactory {
     }
 
     public ContentRarity rarity(@Range(from = 0, to = 1) float chance) {
-        return ContentRarity.NORMAL;
+        return rarityMap.floorEntry(Math.min(chance, 1.0f)).getValue();
     }
 
 

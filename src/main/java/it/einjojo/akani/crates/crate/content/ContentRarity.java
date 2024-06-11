@@ -9,9 +9,14 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.NavigableMap;
+import java.util.TreeMap;
+
 import static net.kyori.adventure.text.format.NamedTextColor.*;
 
 public interface ContentRarity {
+
+
     ContentRarity NORMAL = new BasicContentRarity(Component.text("Normal", GRAY),
             new ItemBuilder(Material.GRAY_STAINED_GLASS_PANE).build());
     ContentRarity UNCOMMON = new BasicContentRarity(Component.text("Ungewöhnlich", GREEN),
@@ -28,7 +33,6 @@ public interface ContentRarity {
             new ItemBuilder(Material.YELLOW_STAINED_GLASS_PANE).displayName(Component.empty()).build());
     ContentRarity GODLY = new AnnouncingContentRarity(Component.text("Göttlich", LIGHT_PURPLE).decorate(TextDecoration.BOLD),
             new ItemBuilder(Material.PINK_STAINED_GLASS_PANE).displayName(Component.empty()).build());
-
 
     /**
      * How the ContentRarity should appear in lore.

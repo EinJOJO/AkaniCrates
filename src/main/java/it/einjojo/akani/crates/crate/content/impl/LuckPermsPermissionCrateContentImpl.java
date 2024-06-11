@@ -31,10 +31,10 @@ public class LuckPermsPermissionCrateContentImpl implements PermissionCrateConte
         this.luckPerms = luckPerms;
         this.permission = permission;
         this.permissionDescription = permissionDescription;
-        this.previewItem = previewItemFactory.createPreviewItem(this);
         this.expiry = expiry;
         this.chance = chance;
         this.rarity = rarity;
+        this.previewItem = previewItemFactory.createPreviewItem(this);
     }
 
     @Override

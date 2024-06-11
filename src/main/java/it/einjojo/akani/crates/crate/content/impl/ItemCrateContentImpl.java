@@ -20,7 +20,6 @@ public class ItemCrateContentImpl implements ItemCrateContent {
     private ContentRarity rarity;
 
     public ItemCrateContentImpl(@NotNull ItemStack itemStack, float chance, PreviewItemFactory previewItemFactory, ContentRarity rarity) {
-        this.rarity = rarity;
         Preconditions.checkNotNull(itemStack);
         //TODO AIR CHECK
         if (itemStack.getType().equals(Material.AIR)) {
@@ -28,8 +27,9 @@ public class ItemCrateContentImpl implements ItemCrateContent {
         }
         this.itemStack = itemStack;
         this.chance = chance;
-        this.previewItem = previewItemFactory.createPreviewItem(this);
+        this.rarity = rarity;
         this.previewItemFactory = previewItemFactory;
+        this.previewItem = previewItemFactory.createPreviewItem(this);
 
     }
 

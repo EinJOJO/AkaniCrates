@@ -21,6 +21,7 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -45,35 +46,49 @@ public class CrateCommand extends BaseCommand {
 
     @Subcommand("create")
     @CommandCompletion("<id:string> <title:minimessage>")
-    public void createCrate(Player player, @Single String id, String title) {
+    @Nullable
+    public Crate createCrate(Player player, @Single String id, String title) {
         if (crateManager.crate(id) != null) {
             player.sendMessage(CratesPlugin.miniMessage().deserialize("<prefix><red>Die Kiste existiert bereits"));
-            return;
+            return null;
         }
         if (id.length() > 16) {
             player.sendMessage(CratesPlugin.miniMessage().deserialize("<prefix><red>Die ID darf maximal 16 Zeichen lang sein"));
-            return;
+            return null;
         }
 
-        List<CrateContent> contents = new LinkedList<>();
-        var factory = new CrateContentFactory();
-        //for (Material m : Material.values()) {
-        //    if (m.isFuel() && !m.isAir()) {
-        //        contents.add(factory.itemContent(new ItemStack(m), 1));
-        //    }
-        //}
-
         Component titleComponent = CratesPlugin.miniMessage().deserialize(title);
-        crateManager.register(new InventoryCrateImpl(
+        Crate crate = new InventoryCrateImpl(
                 id,
                 titleComponent,
-                contents,
+                new LinkedList<>(),
                 new NullEffectFactory()
-        ));
+        );
+        crateManager.register(crate);
         player.sendMessage(CratesPlugin.miniMessage().deserialize("<prefix><green>Crate <crate> <gray>(<id>)</gray> erstellt",
                 Placeholder.parsed("id", id),
                 Placeholder.component("crate", titleComponent)));
 
+        return crate;
+    }
+
+    @Subcommand("create test")
+    public void createTestCrate(Player player) {
+        Crate crated = createCrate(player, "test", "<red>Test Crate</red>");
+        if (crated == null) return;
+        var factory = new CrateContentFactory();
+        List<CrateContent> contents = new LinkedList<>();
+        for (int i = 30; i < 60; i++) {
+            contents.add(factory.itemContent(new ItemStack(Material.values()[i]), (float) 100 / i));
+        }
+        for (int i = 1; i < 6; i++) {
+            contents.add(factory.coinsContent(1000 * i, (float) 1 / i));
+        }
+        for (int i = 10; i < 20; i++) {
+            contents.add(factory.thalerContent(1000 * i, (float) 1 / i));
+        }
+        contents.add(factory.permissionContent("crate.test", "Test", 0.01f));
+        crated.contents().addAll(contents);
     }
 
     @Subcommand("edit")
